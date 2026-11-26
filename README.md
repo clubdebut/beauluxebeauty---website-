@@ -145,6 +145,60 @@ the page looks right before video loads.
 
 ---
 
+## Going live (GitHub Pages + GoDaddy)
+
+The site is published from this repository:
+`https://github.com/clubdebut/beauluxebeauty---website-`
+
+### 1. Turn on GitHub Pages
+Repository → **Settings** → **Pages** → under *Build and deployment* set
+**Source: Deploy from a branch**, **Branch: `main`**, folder **`/ (root)`** → **Save**.
+
+The `CNAME` file in this repo already contains `www.beauluxebeauty.com`, so the Custom domain
+field fills in by itself. Leave **Enforce HTTPS** unticked until the certificate is issued
+(usually minutes, occasionally up to 24 hours), then tick it.
+
+### 2. DNS at GoDaddy
+GoDaddy → your domain → **DNS** → **Manage Zones**.
+
+First **delete** any existing `A` record on `@` and any `CNAME` on `www` (GoDaddy adds parking
+records by default — they will block the HTTPS certificate if left in place).
+
+Then add:
+
+| Type | Name | Value | TTL |
+|---|---|---|---|
+| A | @ | 185.199.108.153 | 1 hour |
+| A | @ | 185.199.109.153 | 1 hour |
+| A | @ | 185.199.110.153 | 1 hour |
+| A | @ | 185.199.111.153 | 1 hour |
+| CNAME | www | clubdebut.github.io | 1 hour |
+
+The four A records make the bare `beauluxebeauty.com` work; the CNAME serves
+`www.beauluxebeauty.com`, which is the canonical address used throughout the site.
+
+Check propagation with:
+
+```
+nslookup beauluxebeauty.com
+```
+
+It should return the four addresses above. DNS can take up to 24 hours, though GoDaddy is
+usually much faster.
+
+### 3. Publishing changes afterwards
+Everything in this folder is the live site. To publish an edit:
+
+```
+git add -A
+git commit -m "Describe the change"
+git push
+```
+
+GitHub Pages redeploys within about a minute.
+
+---
+
 ## Local preview
 
 Opening `index.html` directly works. For a local server (so video and fonts behave exactly as in
