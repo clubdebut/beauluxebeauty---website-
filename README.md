@@ -129,6 +129,9 @@ Long-form text keeps a capped measure so line lengths stay readable as container
 
 ## Assets
 
+> Header uses `logo-head.png` / `logo-head-white.png` (280px). `logo-full*.png` (480px)
+> is the footer lockup and is lazy-loaded. See the performance pass in the change log.
+
 Everything in `assets/` was generated from the source files in this project — originals untouched.
 
 - **Logos** — cropped from the 6000×6000 brand PNGs, transparency preserved, plus white versions for
@@ -229,6 +232,53 @@ spas before launch.**
 
 ## Change log
 
+
+
+### 28 November 2026 — performance pass
+
+The site was spending about a megabyte before it drew anything, against a 58ms server
+response, so nearly all of the wait was self-inflicted. Four things were doing it.
+
+**Logos were the worst of it.** The header carried two 900×825 PNGs, 146KB together, to draw
+a mark that is never bigger than 122×112. They are now a 280px pair at 46KB — still better
+than 2× for retina — and the footer logo dropped to 480px and became lazy, since it is below
+the fold. That is roughly **100KB off every page on the site**, the home page included.
+
+**Hero videos were racing the stylesheet.** Each one carried `autoplay` and
+`preload="metadata"`, so the browser pulled the clip down in parallel with the CSS and fonts
+it needed in order to paint. The laser page was fetching 1.9MB this way and the skin page
+1.1MB. Every hero now carries `data-src` with `preload="none"`, and all video loading waits
+for the window load event, so no clip ever competes with a render-blocking resource. The
+poster still paints immediately, so the hero looks the same — it simply starts moving a
+moment later.
+
+**The pop-up fetched both of its images.** The 169KB wide graphic and the 45KB phone crop were
+both pulled on every home page visit, one of them always invisible, and both before the
+stylesheet had arrived. Only the variant the viewport will actually show is fetched now, and
+only after load.
+
+**Posters for below-fold videos** became `data-poster` and now attach with their video rather
+than on page load — about 230KB on the Black Friday page alone.
+
+**Photographs were over-encoded.** Re-encoding every JPEG above 40KB at `-q:v 6` took the
+image set from 2,139KB to 1,555KB, a **584KB saving**, at identical pixel dimensions and with
+no markup change. Checked at 100% against the originals on skin texture, eyelashes and
+lettering before shipping; the pairs are indistinguishable.
+
+The two separate video observers also became one `initLazyMedia()`, which fixed background
+clips ignoring `prefers-reduced-motion`.
+
+#### If it still needs to be faster
+
+Two things are left, both bigger jobs than the above:
+
+- **Web fonts cost 101KB and two round trips.** The browser fetches a stylesheet from
+  `fonts.googleapis.com`, reads it, then fetches the font files from `fonts.gstatic.com`.
+  Self-hosting the four files in `assets/fonts/` removes both hops from the critical path.
+  Both families are open-licensed, so this is allowed — it just means downloading and
+  committing the files.
+- **Photographs are JPEG, 80–110KB each.** WebP would roughly halve them. Everything on the
+  page is lazy already, so this affects scrolling rather than first paint.
 
 ### 28 November 2026 — Black Friday campaign
 
