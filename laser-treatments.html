@@ -83,7 +83,10 @@
 
   <section class="phero">
     <div class="phero__media">
-      <img src="assets/img/skin-plasma-02.jpg" alt="A precision device treatment being performed in a Beau Luxe Beauty treatment room">
+      <video data-bg autoplay muted loop playsinline preload="metadata" poster="assets/img/poster-laser.jpg">
+        <source src="assets/video/laser-hair-removal.mp4" type="video/mp4">
+        <img src="assets/img/poster-laser.jpg" alt="A laser hair removal treatment in progress">
+      </video>
     </div>
     <div class="phero__inner">
       <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span>/</span>Treatments<span>/</span>Laser Treatments</nav>
@@ -120,24 +123,40 @@
     <div class="wrap" style="padding-top:var(--section)">
       <span class="eyebrow reveal">What we offer</span>
       <h2 class="d3 reveal" data-d="1" style="margin-bottom:clamp(26px,3.2vw,44px);max-width:24ch">Two core services</h2>
-      <div class="tlist reveal">
-        <article class="titem">
-          <h3 class="titem__name"><small>Hair reduction</small>Laser Hair Removal</h3>
-          <p class="titem__desc">
-            Long-term hair reduction for single areas, paired areas or full body, delivered as a planned
-            course of sessions spaced several weeks apart. Fewer ingrowns, less maintenance and
-            noticeably more comfortable skin.
+      <div class="feature" style="margin-bottom:clamp(40px,5vw,78px)">
+        <div class="feature__media feature__media--wide reveal">
+          <video data-bg muted loop playsinline preload="none" poster="assets/img/poster-laser-device.jpg">
+            <source src="assets/video/laser-device.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="feature__body reveal" data-d="1">
+          <span class="eyebrow">Hair reduction</span>
+          <h3 class="d3" style="margin-bottom:1.1rem">Laser Hair Removal</h3>
+          <p class="lede">
+            Long-term hair reduction for single areas, paired areas or full body, delivered as a
+            planned course of sessions spaced several weeks apart. Fewer ingrowns, less maintenance
+            and noticeably more comfortable skin.
           </p>
-          <span class="titem__meta">Package of sessions</span>
-        </article>
-        <article class="titem">
-          <h3 class="titem__name"><small>Correction</small>Tattoo Removal</h3>
-          <p class="titem__desc">
-            Fading and removal of unwanted tattoos, including correction of previous permanent makeup.
-            Treatment is staged across multiple sessions to let the body clear pigment between visits.
+          <p class="titem__meta">Package of sessions</p>
+        </div>
+      </div>
+
+      <div class="feature feature--flip">
+        <div class="feature__media feature__media--tall reveal">
+          <video data-bg muted loop playsinline preload="none" poster="assets/img/poster-tattoo.jpg">
+            <source src="assets/video/tattoo-removal.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="feature__body reveal" data-d="1">
+          <span class="eyebrow">Correction</span>
+          <h3 class="d3" style="margin-bottom:1.1rem">Tattoo Removal</h3>
+          <p class="lede">
+            Fading and removal of unwanted tattoos, including correction of previous permanent
+            makeup. Treatment is staged across multiple sessions to let the body clear pigment
+            between visits.
           </p>
-          <span class="titem__meta">Staged sessions</span>
-        </article>
+          <p class="titem__meta">Staged sessions</p>
+        </div>
       </div>
       <p class="lede" style="margin-top:2.4rem;max-width:62ch">
         Session counts and suitability are confirmed at consultation, where we assess skin type, the
@@ -153,7 +172,7 @@
         <h2 class="d3 reveal" data-d="1">What to expect</h2>
       </div>
       <div class="cards cards--3">
-        <article class="card reveal"><h3>Consultation &amp; patch test</h3><p>We assess skin type and the treatment area, confirm suitability and agree a realistic plan and schedule.</p></article>
+        <article class="card reveal"><h3>Consultation</h3><p>We assess skin type and the treatment area, confirm suitability and agree a realistic plan and schedule.</p></article>
         <article class="card reveal" data-d="1"><h3>A planned course</h3><p>Sessions are spaced to work with your body's natural cycles, which is what makes results hold.</p></article>
         <article class="card reveal" data-d="2"><h3>Little to no downtime</h3><p>Most laser treatments require little or no downtime, depending on the service and area treated.</p></article>
       </div>
@@ -225,15 +244,32 @@
       </div>
 
       <div>
+        <h4>Visit</h4>
+        <ul class="footer__list">
+          <li>
+            <strong class="footer__loc">Grants Pass, Oregon</strong>
+            <a href="https://maps.google.com/?q=550+SW+6th+Street+Suite+C+Grants+Pass+OR+97526" rel="noopener">
+              550 Southwest 6th Street, Suite C<br>Grants Pass, OR 97526
+            </a>
+          </li>
+          <li>
+            <strong class="footer__loc">North Miami Beach, Florida</strong>
+            <a href="https://maps.google.com/?q=16215+Biscayne+Boulevard+Suite+111+North+Miami+Beach+FL+33160" rel="noopener">
+              16215 Biscayne Boulevard, Suite 111<br>North Miami Beach, FL 33160
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
         <h4>Connect</h4>
         <ul class="footer__list">
-          <li><span class="tbd">Add phone number</span></li>
-          <li><span class="tbd">Add email address</span></li>
-          <li><span class="tbd">Add street address</span></li>
+          <li><a href="tel:+14582570020">458-257-0020</a></li>
+          <li><a href="mailto:hello@beauluxebeauty.com">hello@beauluxebeauty.com</a></li>
         </ul>
         <div class="social" style="margin-top:1.4rem">
-          <a href="https://www.instagram.com/" rel="noopener">Instagram</a>
-          <a href="https://www.tiktok.com/" rel="noopener">TikTok</a>
+          <a href="https://www.instagram.com/beauluxebeautyusa/" rel="noopener">Instagram</a>
+          <a href="https://www.instagram.com/beauluxebeautygrantspass/" rel="noopener">Grants Pass</a>
         </div>
       </div>
     </div>

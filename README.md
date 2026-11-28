@@ -25,50 +25,38 @@ All Q&A copy is taken verbatim from the Website Description document.
 
 ---
 
-## ⚠️ Before you launch
+## Still outstanding before launch
 
-Everything below is deliberately left blank rather than guessed. Placeholders appear on the page as
-a **dashed tan box** (e.g. `Add phone number`) so they are impossible to miss.
+Contact details are now live on the site (see *Change log* below). These remain:
 
-### 1. Contact details
-Search the HTML for `class="tbd"` and replace each one. They appear in:
-- the footer of **every** page (phone, email, address)
-- `contact.html` (address, phone, email, opening hours)
-
-```powershell
-Select-String -Path *.html -Pattern 'class="tbd"'
-```
-
-### 2. Booking link
-All "Book a Consultation" buttons point at one variable. Edit the top of
-`assets/js/main.js`:
+### 1. Booking link
+All "Book a Consultation" buttons point at one variable. Edit the top of `assets/js/main.js`:
 
 ```js
-var BOOKING_URL = 'contact.html';   // ← change to your live booking URL
+var BOOKING_URL = 'contact.html';   // ← change to the Aesthetic Record / EMR booking URL
 ```
 
-### 3. Consultation form
-The form currently **sends nothing anywhere** — it validates and shows a confirmation panel only.
-To make it live, give the `<form>` in `contact.html` an `action` and `method` for your provider
-(Squarespace form, Formspree, Netlify Forms, your booking system):
+### 2. Consultation form
+The form **sends nothing anywhere**. It validates and shows a confirmation, but enquiries are
+discarded. To make it live, give the `<form>` in `contact.html` an `action` and `method`:
 
 ```html
 <form class="form" data-consult-form action="https://formspree.io/f/XXXXXXX" method="post">
 ```
 
-Once `action` is set, `main.js` stops intercepting and the form submits normally.
+Once `action` is set, `assets/js/main.js` stops intercepting and the form submits normally.
 
-### 4. Social links
-Instagram and TikTok currently point at the platform home pages. Update them in the footer of each
-page and in `contact.html`.
+### 3. TikTok
+Removed rather than left pointing at the TikTok home page. Add it back to the footer and the
+contact page once the account URL is confirmed.
+
+### 4. Black Friday promotion
+Not built. Needs the final approved offer and the checkout link.
 
 ### 5. Pricing — a deliberate decision
-**No prices appear anywhere on the site.** The figures in *Treatments and Services.docx* are labelled
-"Proposed Pricing Structure" and "Estimated", and sit alongside internal cost and margin planning.
-Publishing proposed internal pricing as live retail pricing is a business risk, so it was left out.
-
-The treatment lists are built so a price column drops straight in — the `.titem__meta` slot on the
-right of each row currently holds things like "By consultation" and is where a price would go.
+**No prices appear anywhere on the site.** The figures in *Treatments and Services.docx* are
+labelled "Proposed Pricing Structure" and "Estimated", and sit alongside internal cost and margin
+planning. The treatment rows are built so a price drops straight in.
 
 ---
 
@@ -216,3 +204,29 @@ Every page footer carries a disclaimer stating that content is educational rathe
 advice, that treatments follow consultation and assessment, that results vary, and that laser
 services are Oregon-only. **Have this reviewed against your state's advertising rules for medical
 spas before launch.**
+
+---
+
+## Change log
+
+### 28 November 2026 — launch pass (from *Website Modifications/Changes List.docx*)
+
+1. **Homepage cover video** — replaced with the newly edited, smoother reception clip
+   (`VIDEO 01`). Headline and buttons unchanged.
+2. **Homepage philosophy** — the white-orchid paragraph was removed and replaced with the
+   *Our Aesthetic Philosophy* copy. The orchid footage beside it was kept, since removing it
+   would have left an empty column and the brief said no redesign was needed at this stage.
+3. **Laser Treatments media** — the page hero image became the laser hair removal video
+   (`VIDEO 02`). The two optional clips were also used: the device clip now sits beside
+   *Laser Hair Removal* and the tattoo clip beside *Tattoo Removal*.
+4. **Laser "What to expect"** — "Consultation & patch test" is now "Consultation".
+5. **Footer contact** — all placeholders removed. The footer gained a fifth column so both
+   locations show in full, with phone and email as tap-to-call / tap-to-email links.
+6. **Social links** — Instagram now points at `@beauluxebeautyusa`, with `@beauluxebeautygrantspass`
+   alongside it. TikTok was removed rather than left pointing at the platform home page.
+7. **Contact page** — placeholders replaced with both addresses, phone and email. Addresses link
+   to Google Maps. The opening-hours row was removed since no hours were supplied; "Consultations
+   are by appointment" remains.
+
+Not done, pending information: booking/checkout URL, form endpoint, TikTok URL, Black Friday
+promotion.

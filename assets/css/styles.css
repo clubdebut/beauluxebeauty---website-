@@ -589,7 +589,8 @@ body.nav-open .drawer{opacity:1;visibility:visible;transform:none;}
   display:grid;gap:clamp(32px,4vw,56px);
   padding-bottom:clamp(38px,4.6vw,62px);border-bottom:1px solid rgba(237,233,228,.16);
 }
-@media (min-width:900px){.footer__top{grid-template-columns:1.5fr 1fr 1fr 1.25fr;}}
+@media (min-width:680px){.footer__top{grid-template-columns:repeat(2,1fr);}}
+@media (min-width:1120px){.footer__top{grid-template-columns:1.5fr .8fr .8fr 1.25fr 1fr;}}
 .footer__brand img{width:clamp(180px,17vw,220px);height:auto;margin-bottom:1.6rem;}
 .footer__tag{font-family:var(--serif);font-style:italic;font-size:1.18rem;line-height:1.5;color:rgba(237,233,228,.8);max-width:26ch;}
 .footer h4{
@@ -597,6 +598,11 @@ body.nav-open .drawer{opacity:1;visibility:visible;transform:none;}
   color:var(--sand);margin-bottom:1.3rem;font-weight:400;
 }
 .footer__list li{margin-bottom:.72rem;font-size:.92rem;}
+.footer__list li a{display:inline-block;}
+/* Location name above each address in the footer Visit column. */
+.footer__loc{display:block;font-weight:400;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(237,233,228,.9);margin-bottom:.4rem;}
+.footer__list li + li .footer__loc{margin-top:1.2rem;}
 .footer__bottom{
   display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:center;
   padding-top:clamp(22px,2.6vw,32px);
