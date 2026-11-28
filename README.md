@@ -19,6 +19,7 @@ No build step, no framework, no dependencies. Open `index.html` in a browser, or
 | `skin-regeneration.html` | BioSkin Renewal Program + Precision Plasma, pathway, Q&A |
 | `body-optimization.html` | Beauty Systems, Body Refinement, Recovery & Renewal, Q&A |
 | `laser-treatments.html` | Laser hair removal + tattoo removal (Oregon), Q&A |
+| `blackfriday.html` | **Campaign page** — Black Friday specials, 27–30 Nov 2026 (see *Retiring the campaign*) |
 | `contact.html` | Consultation request form, visiting info, what to expect |
 
 All Q&A copy is taken verbatim from the Website Description document.
@@ -50,8 +51,27 @@ Once `action` is set, `assets/js/main.js` stops intercepting and the form submit
 Removed rather than left pointing at the TikTok home page. Add it back to the footer and the
 contact page once the account URL is confirmed.
 
-### 4. Black Friday promotion
-Not built. Needs the final approved offer and the checkout link.
+### 4. Black Friday checkout links
+The campaign page is built and live. Every purchase button currently falls back to the contact
+page, because no Square (or other) payment links were supplied. Paste them into one map near the
+bottom of `assets/js/main.js`:
+
+```js
+var BF_LINKS = {
+  'skincare' : 'https://square.link/u/XXXXXXX',   // 01  FACTORFIVE regimen
+  'facial'   : '',                                // 02  FACTORFIVE Glow Facial
+  ...
+};
+```
+
+Anything left as `''` keeps using the fallback, so no button is ever dead.
+
+### 4a. FACTORFIVE per-product discounts
+The brief says *25% off **eligible** FACTORFIVE products* without saying which are eligible, so
+the five individual products show their **regular** prices and the 25% is described as applying
+at checkout. Only the Complete Collection shows a struck-through Black Friday price, because the
+brief states that one explicitly. Confirm which products are eligible and the per-product
+Black Friday prices can be shown too.
 
 ### 5. Pricing — a deliberate decision
 **No prices appear anywhere on the site.** The figures in *Treatments and Services.docx* are
@@ -209,6 +229,58 @@ spas before launch.**
 
 ## Change log
 
+
+### 28 November 2026 — Black Friday campaign
+
+From *BlackFriday Website Information.docx*, *FACTORFIVE Skincare Website Info.docx* and the
+six clips in *Black Friday Website Videos*.
+
+**New page: `blackfriday.html`** — matte black with cream and champagne accents, per the
+branding note in the brief. It is the only page on a dark ground; the rest of the site is
+untouched.
+
+1. **Hero** — "BLACK FRIDAY / Beauty Evolved." with the campaign tagline, the promotional
+   sentence from the brief, and the closing date.
+2. **Six offers**, each with its treatment video, name, regular price where one was given,
+   Black Friday price, saving, description, terms and purchase button — the structure the
+   brief asked for. BioJet carries both tiers (single and five-treatment series); laser hair
+   removal carries the five eligible areas and the underarm bonus.
+3. **FACTORFIVE collection** — the five products from the skincare document with their images,
+   descriptions and prices, plus the Complete Collection at its Black Friday price.
+4. **Complimentary consultation** block — $100 value, free, no purchase required.
+5. **Promotion terms** — every term stated in the brief, grouped into *The promotion* and
+   *Treatments and eligibility*.
+6. **Homepage pop-up** — the supplied Black Friday graphic, shown once per browsing session.
+   A real close button sits over the one drawn into the graphic, Escape closes it, focus is
+   trapped while it is open and returned afterwards. Below 720px the wide graphic is replaced
+   by a cropped portrait with live text, because the graphic's small print is unreadable at
+   phone width. The pop-up stops appearing by itself after 30 November 2026.
+7. **Persistent entry points** — a "Black Friday" item in the main nav and mobile drawer, a
+   teaser strip under the homepage hero, and a footer link, so the campaign is still reachable
+   once the pop-up has been dismissed.
+
+**Media.** The six supplied `.mov` clips were transcoded to H.264 (640×1138, 24fps, muted,
+faststart), 6.9MB in total. They are **not** loaded with the page: each carries `data-src` and
+is attached and played only when scrolled to, then paused when it leaves. Under
+`prefers-reduced-motion` they do not autoplay and gain controls instead.
+
+**One price was corrected.** The brief gives the FACTORFIVE Complete Regimen as *Regular
+$590.00, Black Friday $442.60, Savings $147.50*. Those three figures are inconsistent:
+$590.00 − $147.50 is $442.50, which is also exactly 25% off. The page shows **$442.50**.
+Change it in `blackfriday.html` (two places) if $442.60 was intended.
+
+**Not included: a refund policy.** The brief asks for one to be displayed but none was
+supplied, and it is not something to invent — the terms section points people to the phone
+number and email instead. Add the wording when you have it.
+
+### Retiring the campaign
+
+After 30 November 2026, remove: `blackfriday.html`; the `.bfpop` block and `.bfteaser` strip in
+`index.html`; the "Black Friday" nav, drawer and footer links on every page; the
+`blackfriday.html` entry in `sitemap.xml`; section 23 of `assets/css/styles.css`; and the Black
+Friday block at the end of `assets/js/main.js`. The pop-up disables itself on that date either
+way, so nothing breaks if this waits.
+
 ### 28 November 2026 — launch pass (from *Website Modifications/Changes List.docx*)
 
 1. **Homepage cover video** — replaced with the newly edited, smoother reception clip
@@ -228,5 +300,5 @@ spas before launch.**
    to Google Maps. The opening-hours row was removed since no hours were supplied; "Consultations
    are by appointment" remains.
 
-Not done, pending information: booking/checkout URL, form endpoint, TikTok URL, Black Friday
-promotion.
+Not done, pending information: booking/checkout URL, form endpoint, TikTok URL. The Black Friday
+promotion was built on 28 November — see the entry above.

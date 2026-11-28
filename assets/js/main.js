@@ -214,4 +214,137 @@
     }, { threshold: 0.05 });
     bgVideos.forEach(function (v) { vio.observe(v); });
   }
+
+  /* =====================================================================
+     BLACK FRIDAY CAMPAIGN  (27-30 November 2026)
+     To retire the campaign: delete blackfriday.html, remove the pop-up
+     markup from index.html, the teaser strip, the "Black Friday" nav
+     items, and this whole block.
+     ===================================================================== */
+
+  /* ---------------------------------------------------------------------
+     1. PURCHASE LINKS - the only place to change.
+     Paste each offer's checkout URL (e.g. a Square payment link) beside
+     its key. Anything left as '' falls back to BF_FALLBACK, so a button
+     is never dead. Keys match data-bf="..." in the HTML.
+     --------------------------------------------------------------------- */
+  var BF_FALLBACK = 'contact.html#enquiry';
+
+  var BF_LINKS = {
+    'skincare'    : '',   /* 01  FACTORFIVE regimen        */
+    'facial'      : '',   /* 02  FACTORFIVE Glow Facial    */
+    'biojet'      : '',   /* 03  BioJet skin renewal       */
+    'laser'       : '',   /* 04  Laser hair removal        */
+    'tattoo'      : '',   /* 05  Laser tattoo removal      */
+    'pmu'         : '',   /* 06  Permanent makeup          */
+    'consult'     : '',   /* Complimentary consultation    */
+    'f5-cleanser' : '',
+    'f5-serum'    : '',
+    'f5-silk'     : '',
+    'f5-cream'    : '',
+    'f5-mask'     : ''
+  };
+
+  document.querySelectorAll('[data-bf]').forEach(function (el) {
+    var bfUrl = (BF_LINKS[el.getAttribute('data-bf')] || '').replace(/^\s+|\s+$/g, '');
+    el.setAttribute('href', bfUrl || BF_FALLBACK);
+    if (bfUrl && /^https?:/i.test(bfUrl)) {
+      el.setAttribute('rel', 'noopener');
+      el.setAttribute('target', '_blank');
+    }
+  });
+
+  /* ---------- 2. Offer videos: load and play only when scrolled to ------
+     Six portrait clips would be several MB if they all loaded up front,
+     so each carries data-src and is attached on approach instead. */
+  var bfReduce = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bfVids = document.querySelectorAll('video[data-src]');
+
+  if (bfVids.length) {
+    if (bfReduce) {
+      bfVids.forEach(function (v) {
+        v.src = v.getAttribute('data-src');
+        v.setAttribute('controls', '');
+      });
+    } else if ('IntersectionObserver' in window) {
+      var bfio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var v = entry.target;
+          if (entry.isIntersecting) {
+            if (!v.src) { v.src = v.getAttribute('data-src'); }
+            var pr = v.play();
+            if (pr && pr.catch) { pr.catch(function () {}); }
+          } else if (v.src && !v.paused) {
+            v.pause();
+          }
+        });
+      }, { rootMargin: '220px 0px', threshold: 0.1 });
+      bfVids.forEach(function (v) { bfio.observe(v); });
+    } else {
+      bfVids.forEach(function (v) { v.src = v.getAttribute('data-src'); });
+    }
+  }
+
+  /* ---------- 3. Homepage pop-up --------------------------------------
+     Shows once per browsing session, and never after the campaign ends. */
+  var pop = document.getElementById('bfpop');
+  if (pop) {
+    var BF_ENDS = new Date(2026, 11, 1, 0, 0, 0);   /* 1 Dec 2026, local */
+    var BF_KEY = 'blb-bf-2026';
+    var popBox = pop.querySelector('.bfpop__box');
+    var popClose = pop.querySelector('.bfpop__close');
+    var popScrim = pop.querySelector('.bfpop__scrim');
+    var popReturn = null;
+
+    var bfSeen = function () {
+      try { return window.sessionStorage.getItem(BF_KEY) === '1'; }
+      catch (e) { return false; }
+    };
+    var bfMark = function () {
+      try { window.sessionStorage.setItem(BF_KEY, '1'); } catch (e) {}
+    };
+
+    var popKey = function (e) {
+      if (e.key === 'Escape') { popHide(); return; }
+      if (e.key !== 'Tab' || !popBox) { return; }
+      var f = popBox.querySelectorAll('a[href], button:not([disabled])');
+      if (!f.length) { return; }
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); first.focus();
+      }
+    };
+
+    var popShow = function () {
+      popReturn = document.activeElement;
+      pop.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () { pop.classList.add('is-in'); });
+      if (popClose) { popClose.focus(); }
+      document.addEventListener('keydown', popKey);
+    };
+
+    var popHide = function () {
+      bfMark();
+      pop.classList.remove('is-in');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', popKey);
+      window.setTimeout(function () { pop.classList.remove('is-open'); }, 420);
+      if (popReturn && popReturn.focus) { popReturn.focus(); }
+    };
+
+    if (popClose) { popClose.addEventListener('click', popHide); }
+    if (popScrim) { popScrim.addEventListener('click', popHide); }
+    pop.querySelectorAll('a[href]').forEach(function (a) {
+      a.addEventListener('click', bfMark);
+    });
+
+    if (!bfSeen() && Date.now() < BF_ENDS.getTime()) {
+      window.setTimeout(popShow, 1500);
+    }
+  }
+
 })();
