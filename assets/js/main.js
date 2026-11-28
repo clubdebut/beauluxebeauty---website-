@@ -199,20 +199,71 @@
     });
   }
 
-  /* ---------- Pause background video when off-screen ---------- */
-  var bgVideos = document.querySelectorAll('video[data-bg]');
-  if (bgVideos.length && 'IntersectionObserver' in window) {
-    var vio = new IntersectionObserver(function (entries) {
+  /* ---------- Lazy media -----------------------------------------------
+     Every video attaches, posters included, only as it is scrolled to, and
+     nothing starts until the page has finished loading. Before this was
+     deferred the hero clip competed with the stylesheet and web fonts for
+     bandwidth and pushed first paint out by roughly a third of a second.
+     --------------------------------------------------------------------- */
+  function initLazyMedia() {
+    var media = document.querySelectorAll('video[data-bg], video[data-src]');
+    if (!media.length) { return; }
+
+    var reduce = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function attach(v) {
+      var ps = v.getAttribute('data-poster');
+      if (ps && !v.getAttribute('poster')) { v.setAttribute('poster', ps); }
+      var sc = v.getAttribute('data-src');
+      if (sc && !v.src) { v.src = sc; }
+    }
+
+    function start(v) {
+      attach(v);
+      if (v.paused) {
+        var pr = v.play();
+        if (pr && pr.catch) { pr.catch(function () {}); }
+      }
+    }
+
+    /* Reduced motion: show the poster instead of playing. Offer-card clips
+       still load, with controls, so they can be watched on purpose. */
+    if (reduce) {
+      media.forEach(function (v) {
+        var ps = v.getAttribute('data-poster');
+        if (ps && !v.getAttribute('poster')) { v.setAttribute('poster', ps); }
+        if (v.hasAttribute('data-src') && !v.hasAttribute('data-bg')) {
+          v.src = v.getAttribute('data-src');
+          v.setAttribute('controls', '');
+        }
+      });
+      return;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      media.forEach(start);
+      return;
+    }
+
+    var mio = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var v = entry.target;
         if (entry.isIntersecting) {
-          if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+          start(v);
         } else if (!v.paused) {
           v.pause();
         }
       });
-    }, { threshold: 0.05 });
-    bgVideos.forEach(function (v) { vio.observe(v); });
+    }, { rootMargin: '220px 0px', threshold: 0.05 });
+
+    media.forEach(function (v) { mio.observe(v); });
+  }
+
+  if (document.readyState === 'complete') {
+    initLazyMedia();
+  } else {
+    window.addEventListener('load', initLazyMedia);
   }
 
   /* =====================================================================
@@ -254,37 +305,8 @@
     }
   });
 
-  /* ---------- 2. Offer videos: load and play only when scrolled to ------
-     Six portrait clips would be several MB if they all loaded up front,
-     so each carries data-src and is attached on approach instead. */
-  var bfReduce = window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var bfVids = document.querySelectorAll('video[data-src]');
-
-  if (bfVids.length) {
-    if (bfReduce) {
-      bfVids.forEach(function (v) {
-        v.src = v.getAttribute('data-src');
-        v.setAttribute('controls', '');
-      });
-    } else if ('IntersectionObserver' in window) {
-      var bfio = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          var v = entry.target;
-          if (entry.isIntersecting) {
-            if (!v.src) { v.src = v.getAttribute('data-src'); }
-            var pr = v.play();
-            if (pr && pr.catch) { pr.catch(function () {}); }
-          } else if (v.src && !v.paused) {
-            v.pause();
-          }
-        });
-      }, { rootMargin: '220px 0px', threshold: 0.1 });
-      bfVids.forEach(function (v) { bfio.observe(v); });
-    } else {
-      bfVids.forEach(function (v) { v.src = v.getAttribute('data-src'); });
-    }
-  }
+  /* Offer-card videos are handled by initLazyMedia() above, with the rest
+     of the site's media. */
 
   /* ---------- 3. Homepage pop-up --------------------------------------
      Shows once per browsing session, and never after the campaign ends. */
@@ -319,6 +341,7 @@
     };
 
     var popShow = function () {
+      loadPopArt();
       popReturn = document.activeElement;
       pop.classList.add('is-open');
       document.body.style.overflow = 'hidden';
@@ -335,6 +358,23 @@
       window.setTimeout(function () { pop.classList.remove('is-open'); }, 420);
       if (popReturn && popReturn.focus) { popReturn.focus(); }
     };
+
+    /* The wide graphic is 169KB and the phone crop 45KB. Both used to be
+       fetched on every homepage visit, one of them always invisible, and
+       they loaded before the stylesheet had arrived. Fetch just the one
+       this viewport will show, and only once the page has loaded. */
+    function loadPopArt() {
+      var wide = !window.matchMedia || window.matchMedia('(min-width:720px)').matches;
+      var el = pop.querySelector(wide ? '.bfpop__art' : '.bfpop__mobimg');
+      if (el && !el.getAttribute('src')) {
+        el.setAttribute('src', el.getAttribute('data-src'));
+      }
+    }
+    if (document.readyState === 'complete') {
+      loadPopArt();
+    } else {
+      window.addEventListener('load', loadPopArt);
+    }
 
     if (popClose) { popClose.addEventListener('click', popHide); }
     if (popScrim) { popScrim.addEventListener('click', popHide); }

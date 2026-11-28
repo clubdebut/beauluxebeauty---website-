@@ -27,8 +27,8 @@
 <header class="header">
   <div class="header__inner">
     <a class="brand" href="index.html">
-      <img class="brand__light" src="assets/img/logo-full-white.png" alt="Beau Luxe Beauty">
-      <img class="brand__dark" src="assets/img/logo-full.png" alt="" aria-hidden="true">
+      <img class="brand__light" src="assets/img/logo-head-white.png" width="280" height="257" alt="Beau Luxe Beauty">
+      <img class="brand__dark" src="assets/img/logo-head.png" width="280" height="257" alt="" aria-hidden="true">
     </a>
 
     <nav class="nav" aria-label="Primary">
@@ -86,9 +86,8 @@
   <!-- ===== Hero ===== -->
   <section class="hero">
     <div class="hero__media">
-      <video data-bg autoplay muted loop playsinline preload="metadata"
+      <video data-bg data-src="assets/video/hero-reception.mp4" muted loop playsinline preload="none"
              poster="assets/img/poster-hero.jpg">
-        <source src="assets/video/hero-reception.mp4" type="video/mp4">
         <img src="assets/img/poster-hero.jpg" alt="The Beau Luxe Beauty reception, with white orchids beneath the signature monogram">
       </video>
     </div>
@@ -215,7 +214,7 @@
   <section class="section band-bone">
     <div class="wrap feature">
       <div class="feature__media feature__media--wide reveal">
-        <video data-bg muted loop playsinline preload="none" poster="assets/img/poster-plasma.jpg">
+        <video data-bg muted loop playsinline preload="none" data-poster="assets/img/poster-plasma.jpg">
           <source src="assets/video/plasma-treatment.mp4" type="video/mp4">
         </video>
         <p class="media-note">BioSkin Renewal &middot; in treatment</p>
@@ -288,7 +287,7 @@
   <section class="section">
     <div class="wrap feature feature--flip">
       <div class="feature__media feature__media--tall reveal">
-        <video data-bg muted loop playsinline preload="none" poster="assets/img/poster-orchid.jpg">
+        <video data-bg muted loop playsinline preload="none" data-poster="assets/img/poster-orchid.jpg">
           <source src="assets/video/orchid.mp4" type="video/mp4">
         </video>
       </div>
@@ -361,12 +360,12 @@
     </button>
 
     <a href="blackfriday.html">
-      <img class="bfpop__art" src="assets/img/bf-popup.jpg"
+      <img class="bfpop__art" data-src="assets/img/bf-popup.jpg" width="1500" height="845"
            alt="Black Friday at Beau Luxe Beauty. Beauty evolved. Exclusive offers on regenerative skincare, skin renewal, laser treatments, tattoo removal and permanent makeup. November 27 to 30. Shop Black Friday specials.">
     </a>
 
     <div class="bfpop__mob">
-      <img class="bfpop__mobimg" src="assets/img/bf-popup-mobile.jpg" alt="" aria-hidden="true">
+      <img class="bfpop__mobimg" data-src="assets/img/bf-popup-mobile.jpg" width="620" height="420" alt="" aria-hidden="true">
       <div class="bfpop__mobbody">
         <span class="bf-eyebrow">Beau Luxe Beauty</span>
         <p class="bfpop__mobttl">Black Friday</p>
@@ -382,7 +381,7 @@
   <div class="wrap">
     <div class="footer__top">
       <div class="footer__brand">
-        <img src="assets/img/logo-full-white.png" alt="Beau Luxe Beauty">
+        <img src="assets/img/logo-full-white.png" width="480" height="440" loading="lazy" decoding="async" alt="Beau Luxe Beauty">
         <p class="footer__tag">Where beauty meets biology.</p>
       </div>
 
